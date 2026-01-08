@@ -115,46 +115,84 @@
                     <div class="space-y-4">
                         <label class="text-sm font-bold text-gray-700 block mr-1">اختار المسار التعليمي</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-                            <!-- Path 1: Frontend -->
+                            <!-- Path 1: Web Development -->
                             <label class="path-card cursor-pointer group">
-                                <input type="radio" name="specialization" value="فرونت إند" class="hidden" required>
+                                <input type="radio" name="specialization" value="Web Development" class="hidden"
+                                    required>
                                 <div
                                     class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
                                     <div
                                         class="size-12 md:size-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                                        <span class="material-symbols-outlined text-2xl md:text-3xl">html</span>
+                                        <span class="material-symbols-outlined text-2xl md:text-3xl">code</span>
                                     </div>
-                                    <h3 class="font-bold text-secondary text-base md:text-lg">فرونت إند</h3>
-                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">تصميم واجهات المواقع
-                                    </p>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Web Development</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">تطوير الويب</p>
                                 </div>
                             </label>
-                            <!-- Path 2: Backend -->
+                            <!-- Path 2: Digital Marketing -->
                             <label class="path-card cursor-pointer group">
-                                <input type="radio" name="specialization" value="باك إند (Node JS)" class="hidden">
+                                <input type="radio" name="specialization" value="Digital Marketing" class="hidden">
                                 <div
                                     class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
                                     <div
                                         class="size-12 md:size-14 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                                        <span class="material-symbols-outlined text-2xl md:text-3xl">terminal</span>
+                                        <span class="material-symbols-outlined text-2xl md:text-3xl">campaign</span>
                                     </div>
-                                    <h3 class="font-bold text-secondary text-base md:text-lg">باك إند</h3>
-                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">نود جي إس وقواعد
-                                        البيانات</p>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Digital Marketing</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">التسويق الرقمي</p>
                                 </div>
                             </label>
-                            <!-- Path 3: Content Creator -->
+                            <!-- Path 3: Content Creation -->
                             <label class="path-card cursor-pointer group">
-                                <input type="radio" name="specialization" value="صانع محتوى" class="hidden">
+                                <input type="radio" name="specialization" value="Content Creation" class="hidden">
                                 <div
                                     class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
                                     <div
                                         class="size-12 md:size-14 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                                        <span class="material-symbols-outlined text-2xl md:text-3xl">edit_note</span>
+                                        <span
+                                            class="material-symbols-outlined text-2xl md:text-3xl">video_library</span>
                                     </div>
-                                    <h3 class="font-bold text-secondary text-base md:text-lg">صانع محتوى</h3>
-                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">كتابة وتسويق المحتوى
-                                    </p>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Content Creation</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">صناعة المحتوى</p>
+                                </div>
+                            </label>
+                            <!-- Path 4: Freelancing -->
+                            <label class="path-card cursor-pointer group">
+                                <input type="radio" name="specialization" value="Freelancing" class="hidden">
+                                <div
+                                    class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
+                                    <div
+                                        class="size-12 md:size-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl md:text-3xl">work_history</span>
+                                    </div>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Freelancing</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">العمل الحر</p>
+                                </div>
+                            </label>
+                            <!-- Path 5: Tech Skills -->
+                            <label class="path-card cursor-pointer group">
+                                <input type="radio" name="specialization" value="Tech Skills" class="hidden">
+                                <div
+                                    class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
+                                    <div
+                                        class="size-12 md:size-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl md:text-3xl">memory</span>
+                                    </div>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Tech Skills</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">المهارات التقنية</p>
+                                </div>
+                            </label>
+                            <!-- Path 6: Soft Skills -->
+                            <label class="path-card cursor-pointer group">
+                                <input type="radio" name="specialization" value="Soft Skills" class="hidden">
+                                <div
+                                    class="p-4 md:p-6 border-2 border-gray-100 rounded-2xl text-center transition-all duration-300 group-hover:border-primary/30 h-full flex flex-col justify-center">
+                                    <div
+                                        class="size-12 md:size-14 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl md:text-3xl">psychology</span>
+                                    </div>
+                                    <h3 class="font-bold text-secondary text-base md:text-lg">Soft Skills</h3>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1 md:mt-2">المهارات الشخصية</p>
                                 </div>
                             </label>
                         </div>
