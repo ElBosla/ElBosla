@@ -1040,7 +1040,7 @@
         </main>
 
         <!-- Modal Backdrop -->
-        <div id="applicantModal" class="fixed inset-0 z-[60] hidden overflow-y-auto px-4 py-6 sm:px-0">
+        <div id="applicantModal" class="fixed inset-0 z-[200] hidden overflow-y-auto px-4 py-6 sm:px-0">
             <div class="fixed inset-0 bg-secondary/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
 
             <div
@@ -1078,7 +1078,7 @@
         </div>
 
         <!-- CONTENT MODAL -->
-        <div id="contentModal" class="fixed inset-0 z-[70] hidden overflow-y-auto px-4 py-6 sm:px-0">
+        <div id="contentModal" class="fixed inset-0 z-[200] hidden overflow-y-auto px-4 py-6 sm:px-0">
             <div class="fixed inset-0 bg-secondary/80 backdrop-blur-sm transition-opacity"
                 onclick="closeContentModal()"></div>
             <div
@@ -1234,7 +1234,7 @@
         </div>
 
         <!-- Teacher Modal -->
-        <div id="teacherModal" class="fixed inset-0 z-[70] hidden overflow-y-auto px-4 py-6">
+        <div id="teacherModal" class="fixed inset-0 z-[200] hidden overflow-y-auto px-4 py-6">
             <div class="fixed inset-0 bg-secondary/80 backdrop-blur-sm" onclick="closeTeacherModal()"></div>
             <div
                 class="relative mx-auto mt-10 max-w-2xl bg-white dark:bg-[#1a2428] rounded-[2.5rem] p-8 lg:p-10 shadow-2xl transition-all border border-white/20">
@@ -1283,7 +1283,7 @@
 
 
         <!-- User Modal -->
-        <div id="userModal" class="fixed inset-0 z-[70] hidden overflow-y-auto px-4 py-6">
+        <div id="userModal" class="fixed inset-0 z-[200] hidden overflow-y-auto px-4 py-6">
             <div class="fixed inset-0 bg-secondary/80 backdrop-blur-sm" onclick="closeUserModal()"></div>
             <div
                 class="relative mx-auto mt-10 max-w-lg bg-white dark:bg-[#1a2428] rounded-[2.5rem] p-8 shadow-2xl border border-white/20">
@@ -1453,7 +1453,7 @@
             // --- Dynamic Filter Population ---
             function initFilters() {
                 // Static paths based on the website form
-                const paths = ['فرونت إند', 'باك إند (Node JS)', 'صانع محتوى'];
+                const paths = ['Web Development', 'Digital Marketing', 'Content Creation', 'Freelancing', 'Tech Skills', 'Soft Skills'];
                 specializationFilter.innerHTML = '<option value="">جميع التخصصات</option>' +
                     paths.map(p => `<option value="${p}">${p}</option>`).join('');
 
