@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html class="light" dir="rtl" lang="ar">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>مشاهدة الكورس - بوصلة</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+    <script>
+        // Suppress Tailwind CDN production warning
+        const originalWarn = console.warn;
+        console.warn = function (...args) {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                return; // Suppress Tailwind CDN warning
+            }
+            originalWarn.apply(console, args);
+        };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#13b6ec", "secondary": "#263238" },
+                    fontFamily: { "sans": ["Almarai", "sans-serif"] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Almarai', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        #watermark {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            font-weight: 800;
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+            transition: all 5s linear;
+        }
+
+        /* Protection against screen capture (some browsers respect this) */
+        video::cue {
+            visibility: hidden;
+        }
+
+        .playlist-item.active {
+            background: #13b6ec1a;
+            color: #13b6ec;
+            border-right: 4px solid #13b6ec;
+        }
+
+        /* Custom Video Controls */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 110;
+        }
+
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #13b6ec;
+            width: 0%;
+            border-radius: 5px;
+        }
+
+        .control-btn {
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-btn:hover {
+            color: #13b6ec;
+        }
+
+        .cert-container {
+            width: 800px;
+            height: 560px;
+            background: white;
+            padding: 50px;
+            position: relative;
+            border: 2px solid #13b6ec;
+            outline: 15px solid white;
+            outline-offset: -20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #263238;
+            box-shadow: inset 0 0 100px rgba(19, 182, 236, 0.05);
+        }
+
+        .cert-border {
+            position: absolute;
+            inset: 15px;
+            border: 1px solid #13b6ec;
+            pointer-events: none;
+        }
+
+        .cert-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .cert-course-title {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+            unicode-bidi: plaintext;
+        }
+    </style>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        const isAuth = sessionStorage.getItem('sub_auth') === 'true';
+    </script>
+</head>
+
+<body class="bg-[#101d22] text-white min-h-screen">
+    <!-- Certificate Modal -->
+    <div id="certModal"
+        class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-4">
+        <div class="max-w-4xl w-full flex flex-col items-center">
+            <div id="certificate" class="cert-container shadow-2xl rounded-sm" dir="ltr">
+                <div class="cert-border"></div>
+                <div class="cert-content flex flex-col items-center">
+                    <img src="../assets/images/logo.jpg"
+                        class="size-20 rounded-2xl mb-6 shadow-lg border-2 border-white">
+                    <h1 class="text-4xl font-serif font-black text-secondary mb-1 uppercase tracking-widest">Certificate
+                    </h1>
+                    <p class="text-primary font-bold mb-8 tracking-[0.4em] uppercase text-[10px]">Of Completion</p>
+
+                    <p class="text-gray-400 text-xs font-bold mb-3 italic">This is to certify that</p>
+                    <h2 id="cert-student-name"
+                        class="text-5xl font-serif italic font-black text-secondary mb-5 border-b-2 border-primary/20 px-8 pb-2">
+                    </h2>
+
+                    <p class="text-gray-400 text-xs font-bold mb-3 italic">Has successfully completed the course</p>
+                    <h3 id="cert-course-name"
+                        class="text-2xl font-black text-secondary mb-10 tracking-tight cert-course-title"></h3>
+
+                    <div class="w-full flex justify-between items-end px-10">
+                        <div class="text-left w-32">
+                            <p class="text-[9px] text-gray-400 font-bold mb-1 uppercase">Date</p>
+                            <p id="cert-date" class="font-bold text-secondary text-sm"></p>
+                        </div>
+                        <div class="text-center">
+                            <img src="../assets/images/logo.jpg"
+                                class="size-14 rounded-xl opacity-10 grayscale mb-1 mx-auto">
+                            <p class="text-[7px] text-gray-300 font-bold uppercase tracking-tighter">Official
+                                Verification</p>
+                        </div>
+                        <div class="text-right w-44">
+                            <div
+                                class="mb-1 italic font-serif text-secondary font-bold border-b border-primary/30 pb-1 text-lg">
+                                Hassan</div>
+                            <p class="text-[11px] font-black text-secondary uppercase tracking-wider">Abdelrhman Hassan
+                            </p>
+                            <p class="text-[8px] text-primary font-bold uppercase tracking-widest">Founder of Bousla</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-8">
+                <button onclick="downloadCertificate()"
+                    class="btn-primary px-10 py-4 rounded-2xl font-black flex items-center gap-3">
+                    <span class="material-symbols-outlined">download</span>
+                    تحميل الشهادة (PNG)
+                </button>
+                <button onclick="document.getElementById('certModal').classList.add('hidden')"
+                    class="bg-white/10 hover:bg-white/20 text-white px-10 py-4 rounded-2xl font-black transition-colors">
+                    إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="security-overlay"
+        class="fixed inset-0 z-[1000] bg-black hidden flex flex-col items-center justify-center text-center p-10">
+        <span class="material-symbols-outlined text-8xl text-red-500 mb-6">security</span>
+        <h1 class="text-3xl font-black mb-4">تم رصد نشاط غير مصرح به</h1>
+        <p class="text-gray-400 font-bold max-w-md">عذراً، نظام الأمان الخاص بنا رصد محاولة لتصوير الشاشة أو تسجيل
+            المحتوى. تم تسجيل هذا النشاط وإبلاغ الإدارة.</p>
+        <button onclick="location.reload()" class="mt-8 px-10 py-4 bg-primary rounded-2xl font-black">العودة
+            للمنصة</button>
+    </div>
+
+    <!-- Layout -->
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <!-- Main Player -->
+        <div class="flex-1 p-4 lg:p-8">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <a href="courses.html"
+                        class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                        <span class="text-sm font-bold">الرجوع للمنصة</span>
+                    </a>
+                    <div id="certBtnContainer" class="hidden">
+                        <button onclick="showCertificate()"
+                            class="btn-primary px-6 py-2.5 rounded-xl text-xs font-black flex items-center gap-2 shadow-lg shadow-primary/20">
+                            <span class="material-symbols-outlined">workspace_premium</span>
+                            عرض شهادة الاتمام
+                        </button>
+                    </div>
+                    <img src="../assets/images/logo.jpg" class="size-10 rounded-xl">
+                </div>
+
+                <div class="video-container group">
+                    <video id="mainVideo" class="w-full h-full" oncontextmenu="return false" disablePictureInPicture>
+                        <source src="" type="video/mp4">
+                    </video>
+                    <!-- Floating Watermark -->
+                    <div id="watermark">0123456789</div>
+
+                    <!-- Custom Controls -->
+                    <div class="video-controls">
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-6">
+                                <button onclick="togglePlay()" class="control-btn">
+                                    <span class="material-symbols-outlined" id="playIcon">play_arrow</span>
+                                </button>
+                                <div class="flex items-center gap-4">
+                                    <button onclick="skip(-10)" class="control-btn">
+                                        <span class="material-symbols-outlined">replay_10</span>
+                                    </button>
+                                    <button onclick="skip(10)" class="control-btn">
+                                        <span class="material-symbols-outlined">forward_10</span>
+                                    </button>
+                                </div>
+                                <div class="text-xs font-bold text-white/80">
+                                    <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-black text-white/50">السرعة</span>
+                                    <select onchange="changeSpeed(this.value)"
+                                        class="bg-transparent text-white text-xs font-bold outline-none cursor-pointer">
+                                        <option value="1" class="bg-secondary">1x</option>
+                                        <option value="1.25" class="bg-secondary">1.25x</option>
+                                        <option value="1.5" class="bg-secondary">1.5x</option>
+                                        <option value="2" class="bg-secondary">2x</option>
+                                    </select>
+                                </div>
+                                <button onclick="toggleFullscreen()" class="control-btn">
+                                    <span class="material-symbols-outlined">fullscreen</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="p-overlay" class="absolute inset-0 z-[50] pointer-events-none"></div>
+                </div>
+
+                <div class="mt-10">
+                    <h1 id="v-title" class="text-3xl font-black text-white mb-4">جاري التحميل...</h1>
+                    <p id="v-desc" class="text-gray-400 font-bold leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Playlist -->
+        <div class="w-full lg:w-96 bg-[#1a2b32] border-r border-white/5 p-6 overflow-y-auto">
+            <h3 class="text-xl font-black mb-6">قائمة فيديوهات الكورس</h3>
+            <div id="playlist" class="space-y-3">
+                <!-- Playlist items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@16.1.0"></script>
+    <script src="../assets/js/appwrite.js"></script>
+    <script>
+        const subData = JSON.parse(sessionStorage.getItem('sub_data') || '{}');
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('id');
+
+        const video = document.getElementById('mainVideo');
+        const watermark = document.getElementById('watermark');
+
+        // Comprehensive content for the watermark (Name + Phone)
+        const watermarkText = isAuth ? `${subData.name || ''} - ${subData.phone || ''}` : `GUEST - ${Date.now().toString(36)}`;
+        watermark.textContent = watermarkText;
+
+        // Add a secondary "Ghost" watermark in a fixed position (very faint)
+        const ghostWatermark = document.createElement('div');
+        ghostWatermark.id = 'ghost-watermark';
+        ghostWatermark.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.05);
+            font-size: 3rem;
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 90;
+            user-select: none;
+        `;
+        ghostWatermark.textContent = isAuth ? (subData.phone || 'BOUSLA') : 'FREE PREVIEW';
+        document.querySelector('.video-container').appendChild(ghostWatermark);
+
+        // --- Security Checks ---
+
+        // 1. Watermark Movement & Randomization (The ultimate deterrent)
+        function moveWatermark() {
+            const container = document.querySelector('.video-container');
+            if (!container) return;
+
+            const x = Math.random() * (container.offsetWidth - 200);
+            const y = Math.random() * (container.offsetHeight - 50);
+
+            // Randomize size and colors slightly to haunt screen recorders
+            const sizes = ['1rem', '1.2rem', '1.5rem', '1.8rem', '2rem'];
+            const colors = ['rgba(255,255,255,0.08)', 'rgba(255,255,255,0.15)', 'rgba(255,255,255,0.12)'];
+
+            watermark.style.left = x + 'px';
+            watermark.style.top = y + 'px';
+            watermark.style.fontSize = sizes[Math.floor(Math.random() * sizes.length)];
+            watermark.style.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        // Move every 2 seconds for aggressive tracking
+        setInterval(moveWatermark, 2000);
+
+        // 2. Prevent Screenshots & Screen Recording (Best-effort detection)
+        async function reportViolation(type, details = '') {
+            try {
+                await databases.createDocument(DATABASE_ID, COLLECTIONS.NOTIFICATIONS, ID.unique(), {
+                    subscriberName: isAuth ? subData.name : 'زائر (Public)',
+                    action: type,
+                    details: details || `المستخدم حاول القيام بـ ${type} في صفحة المشاهدة`
+                });
+            } catch (e) { console.error(e); }
+
+            document.getElementById('security-overlay').classList.remove('hidden');
+            video.pause();
+        }
+
+        // Detect if user leaves the tab or browser loses focus (Often happens during screen capture startup)
+        window.addEventListener('blur', () => {
+            if (!video.paused) {
+                video.pause();
+            }
+        });
+
+        // Detect PrintScreen and common shortcuts
+        window.addEventListener('keydown', (e) => {
+            // Block PrintScreen
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+                reportViolation('تصوير الشاشة (PrintScreen)');
+            }
+
+            // Block common capture shortcuts
+            if ((e.ctrlKey && e.shiftKey && (e.key === 'S' || e.key === 's')) ||
+                (e.metaKey && e.shiftKey && (e.key === '4' || e.key === '5')) ||
+                (e.ctrlKey && e.key === 'p') || (e.ctrlKey && e.key === 'P')
+            ) {
+                e.preventDefault();
+                reportViolation('اختصارات تصوير أو طباعة الشاشة');
+                return false;
+            }
+
+            // Prevent viewing source and saving
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+                reportViolation('محاولة عرض الكود أو حفظ الفيديو');
+                return false;
+            }
+        });
+
+        // 3. Heartbeat & Single Session Check
+
+        async function heartbeat() {
+            if (!isAuth || !subData.$id) return;
+            try {
+                const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.SUBSCRIBERS, subData.$id);
+                const currentDeviceId = localStorage.getItem('bousla_curr_device');
+                if (doc.deviceId !== currentDeviceId) {
+                    alert('تم تسجيل الدخول من جهاز آخر، سيتم إغلاق الصفحة.');
+                    window.location.href = 'courses.html';
+                }
+            } catch (e) { console.error('Heartbeat failed', e); }
+        }
+
+        if (isAuth) setInterval(heartbeat, 30000);
+
+        let courseVideos = [];
+        let subWatchedVideos = [];
+        let currentCourseTitle = '';
+
+        async function init() {
+            if (!courseId) { window.location.href = 'courses.html'; return; }
+
+            try {
+                // Course Details
+                const course = await databases.getDocument(DATABASE_ID, COLLECTIONS.COURSES, courseId);
+                currentCourseTitle = course.title;
+                document.getElementById('v-desc').textContent = course.description;
+
+                // Fetch latest sub data to ensure courses are up to date
+                let currentSub = subData;
+                if (isAuth && subData.$id) {
+                    try {
+                        currentSub = await databases.getDocument(DATABASE_ID, COLLECTIONS.SUBSCRIBERS, subData.$id);
+                        sessionStorage.setItem('sub_data', JSON.stringify(currentSub));
+                        subWatchedVideos = currentSub.watchedVideos || [];
+                    } catch (e) { console.error('Failed to sync sub data', e); }
+                }
+
+                // Check Access (Must be Auth + Has Course + Is Paid OR Course is Free)
+                const isPaid = currentSub ? currentSub.paymentStatus === 'paid' : false;
+                const hasCourse = currentSub ? (currentSub.courses || []).includes(courseId) : false;
+                // Force boolean true/false
+                const isFree = course.isFree === true || course.isFree === 'true';
+
+                console.log('Access Debug:', { isFree, isPaid, hasCourse, isAuth });
+
+                // Allow access if Free OR (Auth + Enrolled + Paid)
+                const hasAccess = isFree || (isAuth && hasCourse && isPaid);
+
+                // Sync UI message for pending users (Only if Authenticated)
+                if (isAuth && hasCourse && !isPaid && !isFree) {
+                    const pendingMsg = document.createElement('div');
+                    pendingMsg.className = 'bg-orange-500/10 border border-orange-500/20 p-4 rounded-2xl mb-6 flex items-center gap-4';
+
+                    const icon = document.createElement('span');
+                    icon.className = 'material-symbols-outlined text-orange-500';
+                    icon.textContent = 'pending_actions';
+
+                    const textContainer = document.createElement('div');
+                    textContainer.className = 'text-xs font-bold text-orange-200';
+
+                    const strong = document.createElement('span');
+                    strong.textContent = `عزيزي ${currentSub.name}، حسابك بانتظار التفعيل. `;
+
+                    const small = document.createElement('span');
+                    small.className = 'block text-[10px] text-orange-500/80 mt-1';
+                    small.textContent = 'تواصل مع الإدارة لتفعيل باقي فيديوهات هذا الكورس.';
+
+                    textContainer.appendChild(strong);
+                    textContainer.appendChild(small);
+                    pendingMsg.appendChild(icon);
+                    pendingMsg.appendChild(textContainer);
+
+                    document.getElementById('v-desc').before(pendingMsg);
+                }
+
+                // Playlist
+                const response = await databases.listDocuments(DATABASE_ID, COLLECTIONS.COURSE_VIDEOS, [
+                    Query.equal('courseId', courseId),
+                    Query.orderAsc('order')
+                ]);
+                courseVideos = response.documents;
+
+                const playlist = document.getElementById('playlist');
+                if (response.documents.length === 0) {
+                    playlist.innerHTML = '<p class="text-gray-500 text-sm">لا توجد فيديوهات في هذا الكورس بعد</p>';
+                    return;
+                }
+
+                playlist.innerHTML = '';
+                response.documents.forEach((v, index) => {
+                    const isLocked = !hasAccess && index > 0;
+                    const item = document.createElement('div');
+                    item.className = `playlist-item p-4 rounded-2xl transition-all flex items-center gap-4 ${isLocked ? 'opacity-40 grayscale cursor-not-allowed' : 'cursor-pointer hover:bg-white/5'}`;
+                    item.onclick = () => {
+                        if (isLocked) {
+                            Swal.fire({
+                                icon: 'lock',
+                                title: 'محتوى مقفل',
+                                text: 'يجب الاشتراك في الكورس لمشاهدة باقي المحتوى',
+                                confirmButtonText: 'فهمت'
+                            });
+                        } else {
+                            loadVideo(v.videoId, v.title, item, v.$id);
+                        }
+                    };
+
+                    const isWatched = subWatchedVideos.includes(v.$id);
+                    item.innerHTML = `
+                        <div class="size-10 bg-white/5 rounded-xl flex items-center justify-center font-black text-primary">
+                            ${isWatched ? '<span class="material-symbols-outlined text-xs">check_circle</span>' : (isLocked ? '<span class="material-symbols-outlined text-sm">lock</span>' : (index + 1))}
+                        </div>
+                        <div class="flex-1">
+                            <h4 id="vt-${index}" class="text-sm font-bold text-gray-200 line-clamp-1"></h4>
+                            <p class="text-[10px] text-gray-500 mt-1 uppercase">${isLocked ? 'محتوى مدفوع' : (isWatched ? 'تمت المشاهدة' : 'عرض مجاني')}</p>
+                        </div>
+                    `;
+                    playlist.appendChild(item);
+                    document.getElementById(`vt-${index}`).textContent = v.title;
+                });
+
+                // If no access, show CTA below video
+                if (!hasAccess) {
+                    const cta = document.createElement('div');
+                    cta.className = 'mt-8 p-6 bg-primary/10 border border-primary/20 rounded-3xl flex items-center justify-between gap-4';
+                    cta.innerHTML = `
+                        <div>
+                            <h4 class="font-black text-primary">هل أعجبك المحتوى؟</h4>
+                            <p class="text-xs font-bold text-gray-400">سجل الآن لفتح جميع فيديوهات الكورس والحصول على الدعم الكامل.</p>
+                        </div>
+                        <a href="login-courses.html?tab=signup" class="btn-primary px-6 py-3 rounded-xl text-sm font-black whitespace-nowrap">اشترك الآن</a>
+                    `;
+                    document.getElementById('v-desc').after(cta);
+                }
+
+                // Load first video
+                if (response.documents.length > 0) {
+                    const first = response.documents[0];
+                    loadVideo(first.videoId, first.title, playlist.firstElementChild, first.$id);
+                }
+
+                checkCompletionStatus();
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        let currentVidDocId = '';
+        async function loadVideo(storageId, title, btn, vidDocId) {
+            currentVidDocId = vidDocId;
+            document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.getElementById('v-title').textContent = title;
+
+            // Get view URL (Appwrite)
+            const videoUrl = storage.getFileView(BUCKETS.COURSE_VIDEOS, storageId);
+            video.src = videoUrl;
+            video.load(); // Ensure new source is loaded
+            video.play().catch(e => console.log("Auto-play blocked"));
+        }
+
+        // --- Progress Tracking ---
+        video.onended = async () => {
+            if (!isAuth || !currentVidDocId) return;
+            if (subWatchedVideos.includes(currentVidDocId)) return;
+
+            try {
+                subWatchedVideos.push(currentVidDocId);
+                const subId = JSON.parse(sessionStorage.getItem('sub_data')).$id;
+                await databases.updateDocument(DATABASE_ID, COLLECTIONS.SUBSCRIBERS, subId, {
+                    watchedVideos: subWatchedVideos
+                });
+
+                // Refresh playlist UI to show checkmark
+                init();
+            } catch (e) {
+                console.error("Failed to update progress", e);
+            }
+        };
+
+        function checkCompletionStatus() {
+            if (!isAuth || courseVideos.length === 0) return;
+            const courseVidIds = courseVideos.map(v => v.$id);
+            const watchedInThisCourse = subWatchedVideos.filter(id => courseVidIds.includes(id));
+
+            if (watchedInThisCourse.length === courseVideos.length && courseVideos.length > 0) {
+                document.getElementById('certBtnContainer').classList.remove('hidden');
+            }
+        }
+
+        function showCertificate() {
+            const currentSub = JSON.parse(sessionStorage.getItem('sub_data'));
+            document.getElementById('cert-student-name').textContent = currentSub.name;
+            document.getElementById('cert-course-name').textContent = currentCourseTitle;
+            document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('certModal').classList.remove('hidden');
+        }
+
+        async function downloadCertificate() {
+            const cert = document.getElementById('certificate');
+            const canvas = await html2canvas(cert, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: null
+            });
+            const link = document.createElement('a');
+            link.download = `شهادة_${currentCourseTitle}_${JSON.parse(sessionStorage.getItem('sub_data')).name}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // --- Video Control Logic ---
+
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+                document.getElementById('playIcon').textContent = 'pause';
+            } else {
+                video.pause();
+                document.getElementById('playIcon').textContent = 'play_arrow';
+            }
+        }
+
+        // Update play/pause icon on actual video state change
+        video.onplay = () => document.getElementById('playIcon').textContent = 'pause';
+        video.onpause = () => document.getElementById('playIcon').textContent = 'play_arrow';
+
+        function skip(seconds) {
+            video.currentTime += seconds;
+        }
+
+        function changeSpeed(val) {
+            video.playbackRate = parseFloat(val);
+        }
+
+        function toggleFullscreen() {
+            const container = document.querySelector('.video-container');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Progress Bar
+        video.ontimeupdate = () => {
+            const progress = (video.currentTime / video.duration) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            // Update Time
+            document.getElementById('currentTime').textContent = formatTime(video.currentTime);
+            if (!isNaN(video.duration)) {
+                document.getElementById('duration').textContent = formatTime(video.duration);
+            }
+        };
+
+        const progressContainer = document.getElementById('progressContainer');
+        progressContainer.onclick = (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = video.duration;
+            video.currentTime = (clickX / width) * duration;
+        };
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        // Keyboard support
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                togglePlay();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" dir="rtl" lang="ar">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>بوصلة - طريقك الصح لاحتراف البرمجة والـ Automation</title>
+    <meta name="description"
+        content="منصة بوصلة التعليمية.. كورسات برمجة، تدريب عملي، وخدمات Automation للشركات والأفراد. تعلم مهارات المستقبل بذكاء وبدون تشتت.">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Outfit:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="icon" href="assets/images/logo.jpg" type="image/jpeg" />
+
+    <!-- Tailwind & Scripts -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "primary-dark": "#0e8cb5",
+                        "secondary": "#263238",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "sans": ["Almarai", "sans-serif"],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Almarai', sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #13b6ec 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+
+    <script>
+        // Theme Logic
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        }
+
+        // Scroll Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        });
+    </script>
+</head>
+
+<body
+    class="bg-background-light text-secondary dark:bg-background-dark dark:text-gray-100 overflow-x-hidden transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav
+        class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="assets/images/logo.jpg" alt="Bousla" class="size-10 rounded-xl shadow-sm">
+                <span class="text-2xl font-black tracking-tighter">بوصلة</span>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-8 font-bold text-sm text-gray-500 dark:text-gray-400">
+                <a href="#explore" class="hover:text-primary transition-colors">الأقسام</a>
+                <a href="#why-us" class="hover:text-primary transition-colors">ليه بوصلة؟</a>
+                <a href="#how-it-works" class="hover:text-primary transition-colors">نظام العمل</a>
+                <a href="#pricing" class="hover:text-primary transition-colors">الأسعار</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500">
+                    <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+                    <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+                </button>
+                <a href="portal/form.html?plan=consultation"
+                    class="inline-flex bg-primary text-white px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold hover:bg-primary-dark transition-all">استشارة
+                    مجانية</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-20 pb-32 overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="absolute inset-0 pointer-events-none opacity-40 dark:opacity-20">
+            <div class="absolute -top-24 -right-24 size-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute top-1/2 -left-24 size-80 bg-purple-500/10 rounded-full blur-3xl animate-float"
+                style="animation-delay: 2s"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                <div class="lg:w-1/2 text-center lg:text-right space-y-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-4 py-1.5 rounded-full text-xs font-black border border-blue-100 dark:border-blue-900/50 reveal-on-scroll">
+                        <span class="material-symbols-outlined text-sm">rocket_launch</span>
+                        منصة التعليم التفاعلي الأولى
+                    </div>
+
+                    <h1 class="text-4xl lg:text-7xl font-black leading-tight reveal-on-scroll"
+                        style="transition-delay: 100ms">
+                        توهت في الزحمة؟ <br>
+                        <span class="text-gradient">بوصلة</span> هترتبلك الطريق.
+                    </h1>
+
+                    <p class="text-lg lg:text-xl text-gray-500 dark:text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0 reveal-on-scroll"
+                        style="transition-delay: 200ms">
+                        منصة متكاملة بتقدم كورسات برمجة، تدريب عملي حقيقي، وحلول Automation للأفراد والشركات.
+                        إحنا هنا عشان نوفر عليك وقت "التوهان" ونعلمك مهارات السوق بجد.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start reveal-on-scroll"
+                        style="transition-delay: 300ms">
+                        <a href="#explore"
+                            class="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl font-black text-lg transition-all shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                            <span>ابدأ رحلتك</span>
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </a>
+                        <a href="portal/training.html"
+                            class="bg-white dark:bg-gray-800 text-secondary dark:text-white border-2 border-gray-100 dark:border-gray-700 px-8 py-4 rounded-2xl font-black text-lg transition-all hover:border-primary hover:text-primary flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">terminal</span>
+                            جرب التدريب العملي
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 w-full relative reveal-on-scroll" style="transition-delay: 400ms">
+                    <div
+                        class="relative z-10 bg-white dark:bg-gray-800 rounded-[2.5rem] p-4 shadow-2xl border border-gray-100 dark:border-gray-700 rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="assets/images/learning-path.png" onerror="this.src='assets/images/logo.jpg'"
+                            class="rounded-3xl w-full h-auto object-cover shadow-inner" alt="منصة بوصلة">
+
+                        <!-- Floating Badges -->
+                        <div
+                            class="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 animate-float">
+                            <div
+                                class="size-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600">
+                                <span class="material-symbols-outlined">code</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-400">مجالات</p>
+                                <p class="text-sm font-black">برمجة & ذكاء اصطناعي</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -top-6 -left-6 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 animate-float"
+                            style="animation-delay: 1.5s">
+                            <div
+                                class="size-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center text-orange-600">
+                                <span class="material-symbols-outlined">smart_toy</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-400">خدمات</p>
+                                <p class="text-sm font-black">Automation للشركات</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Bousla -->
+    <section id="why-us" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl lg:text-5xl font-black mb-4">ليه <span class="text-primary">بوصلة</span> مش مجرد
+                    موقع كورسات؟</h2>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">عشان إحنا عارفين مشاكلك مع التعلم الأونلاين وحلناها.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div
+                    class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll">
+                    <div
+                        class="size-16 bg-red-100 dark:bg-red-900/20 text-red-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <span class="material-symbols-outlined">sentiment_frustrated</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">مشكلة التشتت</h3>
+                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed font-bold">
+                        بتدخل يوتيوب تتوه في 100 كورس، وكل واحد يبدأ معاك من الصفر وتزهق قبل ما توصل؟
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <p class="text-primary font-bold flex items-center gap-2">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            الحل: مسار موحد وشامل.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll"
+                    style="transition-delay: 100ms">
+                    <div
+                        class="size-16 bg-purple-100 dark:bg-purple-900/20 text-purple-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <span class="material-symbols-outlined">code_off</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">النظري كتيييير</h3>
+                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed font-bold">
+                        بتتفرج بس؟ البرمجة والشغل محتاجين كيبورد وتطبيق، مش مشاهدة سينمائية.
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <p class="text-primary font-bold flex items-center gap-2">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            الحل: تدريب عملي وتاسكات.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll"
+                    style="transition-delay: 200ms">
+                    <div
+                        class="size-16 bg-orange-100 dark:bg-orange-900/20 text-orange-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <span class="material-symbols-outlined">timer_off</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">إهدار الوقت</h3>
+                    <p class="text-gray-500 dark:text-gray-400 leading-relaxed font-bold">
+                        الشركات عايزة سيستم يوفر وقتها، والأفراد عايزين يتعلموا بسرعة عشان يشتغلوا.
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <p class="text-primary font-bold flex items-center gap-2">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            الحل: حلول Automation ذكية.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Sections (Services) -->
+    <section id="explore" class="py-20 bg-gray-50 dark:bg-black/20">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 reveal-on-scroll">
+                <div>
+                    <h2 class="text-4xl lg:text-5xl font-black mb-2">استكشف عالم بوصلة 🌍</h2>
+                    <p class="text-gray-500 font-bold text-lg">كل الأدوات اللي محتاجها عشان تنجح في مكان واحد</p>
+                </div>
+                <!-- <a href="#" class="text-primary font-black hover:underline underline-offset-4 flex items-center gap-2">
+                    عرض كل الخدمات
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a> -->
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Course Card -->
+                <a href="portal/courses.html"
+                    class="group bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 reveal-on-scroll">
+                    <div
+                        class="aspect-video bg-blue-50 dark:bg-blue-900/20 rounded-2xl mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <img src="assets/images/logo.jpg" class="size-16 rounded-xl shadow-lg">
+                    </div>
+                    <h3 class="text-2xl font-black mb-2 group-hover:text-primary transition-colors">الكورسات</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-bold mb-4 line-clamp-2">
+                        مكتبة كورسات منظمة في البرمجة وتطوير الويب، مختارة بعناية عشان توفر وقتك.
+                    </p>
+                    <div class="flex items-center text-primary font-black text-sm">
+                        تصفح الكورسات <span
+                            class="material-symbols-outlined text-lg mr-auto group-hover:-translate-x-2 transition-transform">arrow_back</span>
+                    </div>
+                </a>
+
+                <!-- Training Card -->
+                <a href="portal/training.html"
+                    class="group bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 reveal-on-scroll"
+                    style="transition-delay: 100ms">
+                    <div
+                        class="aspect-video bg-purple-50 dark:bg-purple-900/20 rounded-2xl mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-6xl text-purple-500">terminal</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-2 group-hover:text-purple-500 transition-colors">التدريب العملي
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-bold mb-4 line-clamp-2">
+                        بيئة عمل ومحرر أكواد أونلاين عشان تطبق اللي اتعلمته فوراً وبدون تسطيب برامج.
+                    </p>
+                    <div class="flex items-center text-purple-500 font-black text-sm">
+                        ابدأ التدريب <span
+                            class="material-symbols-outlined text-lg mr-auto group-hover:-translate-x-2 transition-transform">arrow_back</span>
+                    </div>
+                </a>
+
+                <!-- Automation Card -->
+                <a href="portal/form.html?service=automation"
+                    class="group bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 reveal-on-scroll"
+                    style="transition-delay: 200ms">
+                    <div
+                        class="aspect-video bg-orange-50 dark:bg-orange-900/20 rounded-2xl mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-6xl text-orange-500">precision_manufacturing</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-2 group-hover:text-orange-500 transition-colors">الأوتوميشن</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-bold mb-4 line-clamp-2">
+                        للافراد والشركات: حول المهام المكررة لأنظمة بتشتغل لوحدها ووفر وقتك للابداع.
+                    </p>
+                    <div class="flex items-center text-orange-500 font-black text-sm">
+                        اطلب الخدمة <span
+                            class="material-symbols-outlined text-lg mr-auto group-hover:-translate-x-2 transition-transform">arrow_back</span>
+                    </div>
+                </a>
+
+                <!-- Pricing Card -->
+                <a href="#pricing"
+                    class="group bg-gray-900 dark:bg-gray-700 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all border border-gray-800 dark:border-gray-600 reveal-on-scroll"
+                    style="transition-delay: 300ms">
+                    <div
+                        class="aspect-video bg-gray-800 dark:bg-gray-600 rounded-2xl mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-6xl text-white">card_membership</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-2 text-white">الباقات</h3>
+                    <p class="text-sm text-gray-400 font-bold mb-4 line-clamp-2">
+                        خطط أسعار مرنة بتبدأ من مبالغ رمزية. استثمر في نفسك بأقل تكلفة وأعلى جودة.
+                    </p>
+                    <div class="flex items-center text-white font-black text-sm">
+                        شوف العروض <span
+                            class="material-symbols-outlined text-lg mr-auto group-hover:-translate-x-2 transition-transform">arrow_back</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-4xl lg:text-5xl font-black mb-4">النظام ماشي إزاي؟ 🤔</h2>
+                <p class="text-xl text-gray-500">3 خطوات بس تفصلك عن البداية الصح</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Line Decor -->
+                <div
+                    class="hidden md:block absolute top-12 right-0 left-0 h-1 bg-gray-200 dark:bg-gray-800 -z-10 mx-20 rounded-full">
+                </div>
+
+                <div class="text-center bg-white dark:bg-background-dark p-4 reveal-on-scroll">
+                    <div
+                        class="size-24 mx-auto bg-primary text-white text-4xl font-black rounded-3xl flex items-center justify-center shadow-lg shadow-primary/30 mb-8 border-4 border-white dark:border-background-dark transform rotate-3 hover:rotate-0 transition-transform">
+                        1
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">اختر المسار</h3>
+                    <p class="text-gray-500 font-bold">حدد عايز تتعلم إيه (برمجة، تسويق، جرافيك) أو اطلب استشارة نساعدك
+                        تختار.</p>
+                </div>
+
+                <div class="text-center bg-white dark:bg-background-dark p-4 reveal-on-scroll"
+                    style="transition-delay: 100ms">
+                    <div
+                        class="size-24 mx-auto bg-white dark:bg-gray-800 text-primary border-4 border-primary text-4xl font-black rounded-3xl flex items-center justify-center shadow-lg mb-8 transform -rotate-3 hover:rotate-0 transition-transform">
+                        2
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">اتعلم وطبق</h3>
+                    <p class="text-gray-500 font-bold">شوف الكورس، وبعدين ادخل ورشة "التدريب العملي" عشان تطبق اللي
+                        اتعلمته بإيدك.</p>
+                </div>
+
+                <div class="text-center bg-white dark:bg-background-dark p-4 reveal-on-scroll"
+                    style="transition-delay: 200ms">
+                    <div
+                        class="size-24 mx-auto bg-secondary text-white text-4xl font-black rounded-3xl flex items-center justify-center shadow-lg mb-8 border-4 border-white dark:border-background-dark transform rotate-3 hover:rotate-0 transition-transform">
+                        3
+                    </div>
+                    <h3 class="text-2xl font-black mb-3">وصلت لهدفك</h3>
+                    <p class="text-gray-500 font-bold">طور مهاراتك، اعمل مشاريع وحطها في الـ Portfolio، وقدم على شغل
+                        بقلب جامد.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="py-20 bg-gray-50 dark:bg-black/20">
+        <div class="max-w-5xl mx-auto px-4 lg:px-8 reveal-on-scroll">
+            <h2 class="text-3xl lg:text-4xl font-black text-center mb-12">بوصلة Vs التعلّم العشوائي</h2>
+
+            <div
+                class="bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800">
+                <div
+                    class="grid grid-cols-3 text-center border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800">
+                    <div class="p-6 font-black text-gray-400">وجه المقارنة</div>
+                    <div class="p-6 font-black text-primary text-xl bg-primary/5">بوصلة 🧭</div>
+                    <div class="p-6 font-black text-gray-500">يوتيوب (لوحدك)</div>
+                </div>
+
+                <div class="grid grid-cols-3 text-center border-b border-gray-100 dark:border-gray-800 items-center">
+                    <div class="p-6 font-bold text-gray-600 dark:text-gray-300">ترتيب المحتوى</div>
+                    <div class="p-6 font-bold text-gray-800 dark:text-white bg-primary/5">منظم خطوة بخطوة ✅</div>
+                    <div class="p-6 text-sm font-bold text-gray-500">سايح على بعضه ❌</div>
+                </div>
+
+                <div class="grid grid-cols-3 text-center border-b border-gray-100 dark:border-gray-800 items-center">
+                    <div class="p-6 font-bold text-gray-600 dark:text-gray-300">التطبيق العملي</div>
+                    <div class="p-6 font-bold text-gray-800 dark:text-white bg-primary/5">بيئة تدريب مخصصة 💻</div>
+                    <div class="p-6 text-sm font-bold text-gray-500">انت وحظك 🤷‍♂️</div>
+                </div>
+
+                <div class="grid grid-cols-3 text-center border-b border-gray-100 dark:border-gray-800 items-center">
+                    <div class="p-6 font-bold text-gray-600 dark:text-gray-300">توفير الوقت</div>
+                    <div class="p-6 font-bold text-gray-800 dark:text-white bg-primary/5">وفر 70% من وقت التدوير 🚀
+                    </div>
+                    <div class="p-6 text-sm font-bold text-gray-500">ضياع وقت في البحث ⏳</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-4xl font-black mb-4">اختار الباقة المناسبة ليك</h2>
+                <p class="text-xl text-gray-500">استثمار بسيط في مستقبلك يوفر عليك شهور من التوهان</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 items-start">
+
+                <!-- 1. Basic Plan (البداية) -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all reveal-on-scroll">
+                    <h3 class="text-xl font-black mb-2 text-secondary dark:text-white">البداية</h3>
+                    <p class="text-sm text-gray-500 mb-6 font-bold">اللي محتاج خريطة ومتابعة خفيفة</p>
+
+                    <div class="text-4xl font-black text-secondary dark:text-white mb-2">100 <span
+                            class="text-sm text-gray-400 font-bold">ج.م / شهرياً</span></div>
+
+                    <!-- Offer -->
+                    <div
+                        class="bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-800 rounded-xl p-3 mb-6">
+                        <div class="flex items-center gap-1 text-green-600 font-bold text-xs mb-1">
+                            <span class="material-symbols-outlined text-sm">local_offer</span> عرض خاص
+                        </div>
+                        <p class="font-black text-green-700 dark:text-green-400 text-sm">3 شهور بـ 250 ج.م فقط!</p>
+                        <p class="text-xs text-green-600/80 font-bold">وفر 50 ج.م 🎉</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 font-bold text-gray-500 dark:text-gray-400 text-sm">
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> مسار تعليمي +
+                            فيديوهات منقحة</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> متابعة
+                            أسبوعية</li>
+                    </ul>
+                    <a href="portal/form.html?plan=basic"
+                        class="block w-full text-center border-2 border-primary text-primary py-3 rounded-xl font-black hover:bg-primary hover:text-white transition-all">اشترك
+                        الآن</a>
+                </div>
+
+                <!-- 2. Pro Plan (محترف) -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl border-2 border-primary relative transform md:-translate-y-6 reveal-on-scroll"
+                    style="transition-delay: 100ms">
+                    <div class="absolute top-0 inset-x-0 -translate-y-1/2 flex justify-center">
+                        <span class="bg-primary text-white px-4 py-1 rounded-full text-xs font-black">الأكثر
+                            طلباً</span>
+                    </div>
+
+                    <h3 class="text-xl font-black mb-2 text-secondary dark:text-white">محترف</h3>
+                    <p class="text-sm text-gray-500 mb-6 font-bold">للتركيز العالي والنتيجة السريعة</p>
+
+                    <div class="text-4xl font-black text-secondary dark:text-white mb-2">200 <span
+                            class="text-sm text-gray-400 font-bold">ج.م / شهرياً</span></div>
+
+                    <!-- Offer -->
+                    <div class="bg-primary/10 border border-primary/20 rounded-xl p-3 mb-6">
+                        <div class="flex items-center gap-1 text-primary font-bold text-xs mb-1">
+                            <span class="material-symbols-outlined text-sm">workspace_premium</span> عرض خاص
+                        </div>
+                        <p class="font-black text-secondary dark:text-white text-sm">3 شهور بـ 500 ج.م فقط!</p>
+                        <p class="text-xs text-primary font-bold">وفر 100 ج.م 🔥</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 font-bold text-gray-500 dark:text-gray-400 text-sm">
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> كل مميزات
+                            الباقة السابقة</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> متابعة يومية
+                            لتطورك</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> رد سريع على
+                            الأسئلة</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> تقييم مستمر
+                            وتصحيح تاسكات</li>
+                    </ul>
+                    <a href="portal/form.html?plan=pro"
+                        class="block w-full text-center bg-primary text-white py-4 rounded-xl font-black hover:bg-primary-dark transition-all shadow-lg shadow-primary/30">اشترك
+                        الآن</a>
+                </div>
+
+                <!-- 3. Mentor Plan (منتور) -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all reveal-on-scroll"
+                    style="transition-delay: 200ms">
+                    <h3 class="text-xl font-black mb-2 text-secondary dark:text-white">منتور</h3>
+                    <p class="text-sm text-gray-500 mb-6 font-bold">متابعة شخصية مكثفة</p>
+
+                    <div class="text-4xl font-black text-secondary dark:text-white mb-2">500 <span
+                            class="text-sm text-gray-400 font-bold">ج.م / شهرياً</span></div>
+
+                    <!-- Space holder to align buttons -->
+                    <div class="p-3 mb-6 opacity-0">
+                        <p class="text-sm">Spacer</p>
+                        <p class="text-xs">Spacer</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 font-bold text-gray-500 dark:text-gray-400 text-sm">
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> متابعة شخصية
+                            1-to-1</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> مكالمة
+                            أسبوعية زووم</li>
+                        <li class="flex gap-2"><span
+                                class="material-symbols-outlined text-primary text-lg">check_circle</span> مراجعة مشاريع
+                            كاملة (Code Review)</li>
+                    </ul>
+                    <a href="portal/form.html?plan=mentor"
+                        class="block w-full text-center border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 py-3 rounded-xl font-black hover:border-gray-400 hover:text-gray-700 transition-all">تواصل
+                        معنا</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-24 bg-gradient-to-r from-secondary to-[#101922] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('assets/images/learning-path.png')] bg-cover bg-fixed"></div>
+        <div class="absolute inset-0 bg-secondary/80"></div>
+
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 reveal-on-scroll">
+            <h2 class="text-4xl lg:text-6xl font-black mb-6">مستني إيه؟ 🤔</h2>
+            <p class="text-xl lg:text-2xl text-gray-300 font-bold mb-10 max-w-2xl mx-auto">
+                كل يوم بتأجل فيه، فيه فرصة بتضيع منك. ابدأ النهاردة مع بوصلة وغير مسارك المهني للأفضل.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="portal/courses.html"
+                    class="bg-primary hover:bg-white hover:text-primary text-white px-10 py-5 rounded-2xl font-black text-xl transition-all shadow-2xl">
+                    يلا نبدأ مجاناً 🚀
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-background-dark pt-20 pb-10 border-t border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 text-center sm:text-right">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center justify-center sm:justify-start gap-3 mb-6">
+                        <img src="assets/images/logo.jpg" class="size-12 rounded-xl">
+                        <span class="text-2xl font-black">بوصلة</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 font-bold text-sm leading-relaxed">
+                        منصتك العربية الأولى لتعلم مهارات المستقبل بذكاء. بنوفرلك الوقت، المجهود، والتوهان.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-black mb-6">أقسام الموقع</h4>
+                    <ul class="space-y-3 font-bold text-gray-500 dark:text-gray-400 text-sm">
+                        <li><a href="#explore" class="hover:text-primary">الكورسات</a></li>
+                        <li><a href="portal/training.html" class="hover:text-primary">التدريب العملي</a></li>
+                        <li><a href="#pricing" class="hover:text-primary">الأسعار</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-black mb-6">مساعدة</h4>
+                    <ul class="space-y-3 font-bold text-gray-500 dark:text-gray-400 text-sm">
+                        <li><a href="portal/login-courses.html" class="hover:text-primary">تسجيل الدخول</a></li>
+                        <li><a href="portal/form.html" class="hover:text-primary">تواصل معنا</a></li>
+                        <li><a href="#" class="hover:text-primary">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social -->
+                <div>
+                    <h4 class="font-black mb-6">تابعنا</h4>
+                    <div class="flex justify-center sm:justify-start gap-4">
+                        <a href="https://www.facebook.com/profile.php?id=61586180619770" target="_blank"
+                            class="size-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-facebook-f font-bold text-lg">f</i>
+                        </a>
+                        <a href="https://t.me/Bousla" target="_blank"
+                            class="size-10 bg-blue-400 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <svg class="size-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.703-.331 4.956c.488 0 .704-.223.977-.485l2.344-2.279 4.875 3.6c.898.496 1.542.241 1.767-.832l3.193-15.037c.328-1.315-.5-1.912-1.356-1.532z" />
+                            </svg>
+                        </a>
+                        <a href="https://wa.me/201210178529" target="_blank"
+                            class="size-10 bg-green-500 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <svg class="size-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-bold text-gray-400 text-sm">جميع الحقوق محفوظة © 2026 بوصلة</p>
+                <p class="font-bold text-gray-400 text-xs flex items-center gap-1">
+                    Made with <span class="text-red-500">♥</span> by <span class="text-secondary dark:text-white">Bousla
+                        Team</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "bousla-payment-setup",
+  "version": "1.0.0",
+  "description": "Script to add payment attributes to Appwrite subscribers collection",
+  "main": "add-payment-attributes.js",
+  "scripts": {
+    "add-payment-fields": "node add-payment-attributes.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.0"
+  }
+}

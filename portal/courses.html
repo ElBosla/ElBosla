@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="light" dir="rtl" lang="ar">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>كورسات بوصلة - المحتوى التعليمي</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+    <script>
+        // Suppress Tailwind CDN production warning
+        const originalWarn = console.warn;
+        console.warn = function (...args) {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                return; // Suppress Tailwind CDN warning
+            }
+            originalWarn.apply(console, args);
+        };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "primary-dark": "#0e8cb5",
+                        "secondary": "#263238",
+                        "background-light": "#f6f8f8",
+                    },
+                    fontFamily: { "sans": ["Almarai", "sans-serif"] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Almarai', sans-serif;
+        }
+
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .course-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (hover: hover) {
+            .course-card:hover {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
+    <script>
+        const isAuth = sessionStorage.getItem('sub_auth') === 'true';
+    </script>
+</head>
+
+<body class="bg-[#f8fafb] min-h-screen no-select overflow-x-hidden">
+    <!-- Background Decoration -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40 z-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
+        <div class="absolute top-1/2 -left-24 w-72 h-72 rounded-full bg-blue-100/20 blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-primary/5 blur-3xl"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="glass sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <img src="../assets/images/logo.jpg" class="size-10 sm:size-12 rounded-xl shadow-sm">
+                    <h1 class="text-lg sm:text-xl font-black text-secondary">بوصلة</h1>
+                </a>
+            </div>
+            <div class="flex items-center gap-3" id="nav-user-area">
+                <a href="login-courses.html"
+                    class="bg-primary text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-primary/20 hover:scale-105 transition-transform active:scale-95">تسجيل
+                    دخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 relative z-10">
+        <!-- Hero Section -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 sm:mb-20 reveal active">
+            <div class="text-right">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary mb-4">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider">منصة التعلم الذكي</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black text-secondary lg:leading-[1.2] mb-4">
+                    ابدأ رحلتك في <br class="hidden sm:block" />
+                    <span class="text-primary">إتقان المهارات</span>
+                </h2>
+                <p class="text-gray-500 font-bold text-sm sm:text-base max-w-xl leading-relaxed">
+                    تصفح الكورسات المنسقة بعناية للوصول للاحتراف في أقصر وقت وبأقل مجهود.
+                </p>
+            </div>
+            <div id="hero-action" class="hidden">
+                <a href="login-courses.html?tab=signup"
+                    class="bg-white text-secondary border-2 border-gray-100 px-8 py-4 px-10 rounded-2xl font-black shadow-xl shadow-gray-200/50 flex items-center justify-center gap-3 hover:border-primary hover:text-primary transition-all group active:scale-95">
+                    <span class="material-symbols-outlined group-hover:rotate-12 transition-transform">person_add</span>
+                    اشترك فى الكورسات
+                </a>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+            <!-- Loading placeholders -->
+            <div class="bg-white rounded-[2.5rem] h-[400px] animate-pulse shadow-sm"></div>
+            <div class="bg-white rounded-[2.5rem] h-[400px] animate-pulse shadow-sm"></div>
+            <div class="bg-white rounded-[2.5rem] h-[400px] animate-pulse shadow-sm"></div>
+        </div>
+    </main>
+
+    <!-- Footer Simple -->
+    <footer class="mt-20 py-12 border-t border-gray-100 bg-white/50 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <img src="../assets/images/logo.jpg" class="size-8 rounded-lg grayscale opacity-50">
+                <span class="text-sm font-black text-gray-400">جميع الحقوق محفوظة لمنصة بوصلة © 2026</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@16.1.0"></script>
+    <script src="../assets/js/appwrite.js"></script>
+    <script>
+        const subData = JSON.parse(sessionStorage.getItem('sub_data') || '{}');
+
+        // Update UI based on Auth
+        if (isAuth) {
+            document.getElementById('nav-user-area').innerHTML = `
+                <div class="flex items-center gap-3 sm:gap-4 bg-gray-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl border border-gray-100">
+                    <div class="hidden sm:block text-right">
+                        <p class="text-[10px] font-black text-primary uppercase leading-none mb-1">طالب مشترك</p>
+                        <p class="font-bold text-secondary text-xs leading-none">${subData.name || 'مشترك'}</p>
+                    </div>
+                    <div class="size-8 sm:size-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-sm sm:text-base">person</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="text-red-500 flex items-center justify-center size-10 hover:bg-red-50 rounded-xl transition-colors" title="خروج">
+                    <span class="material-symbols-outlined">logout</span>
+                </button>
+            `;
+        } else {
+            document.getElementById('hero-action').classList.remove('hidden');
+        }
+
+        async function init() {
+            try {
+                // Sync subscriber data
+                let currentSub = subData;
+                if (isAuth && subData.$id) {
+                    try {
+                        currentSub = await databases.getDocument(DATABASE_ID, COLLECTIONS.SUBSCRIBERS, subData.$id);
+                        sessionStorage.setItem('sub_data', JSON.stringify(currentSub));
+                    } catch (e) { console.error('Failed to sync sub data', e); }
+                }
+
+                const subCourses = currentSub.courses || [];
+                const grid = document.getElementById('courses-grid');
+
+                const response = await databases.listDocuments(DATABASE_ID, COLLECTIONS.COURSES);
+
+                if (response.documents.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-span-full py-32 text-center">
+                            <span class="material-symbols-outlined text-6xl text-gray-200 mb-4">search_off</span>
+                            <p class="font-bold text-gray-400">لا توجد كورسات متاحة حالياً</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                grid.innerHTML = ''; // Clear loading
+                response.documents.forEach((course, index) => {
+                    const thumbUrl = course.thumbnailId ? storage.getFileView(BUCKETS.COURSE_THUMBNAILS, course.thumbnailId) : '../assets/images/logo.jpg';
+                    const isOwned = subCourses.includes(course.$id);
+                    const isFree = course.isFree;
+
+                    const card = document.createElement('div');
+                    card.className = "course-card bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden hover:shadow-[0_20px_50px_rgba(19,182,236,0.12)] cursor-pointer group relative flex flex-col h-full reveal";
+                    card.style.transitionDelay = `${index * 100}ms`;
+                    card.onclick = () => window.location.href = `watch.html?id=${course.$id}`;
+
+                    const statusBadge = isFree ?
+                        `<div class="absolute top-5 left-5 z-10 bg-green-500 text-white text-[10px] font-black px-3.5 py-1.5 rounded-xl shadow-lg ring-4 ring-green-500/10">كورس مجاني</div>` :
+                        (!isAuth ?
+                            `<div class="absolute top-5 left-5 z-10 bg-amber-500 text-white text-[10px] font-black px-3.5 py-1.5 rounded-xl shadow-lg ring-4 ring-amber-500/10">تجربة مجانية</div>` :
+                            (isOwned ?
+                                `<div class="absolute top-5 left-5 z-10 bg-green-500 text-white text-[10px] font-black px-3.5 py-1.5 rounded-xl shadow-lg ring-4 ring-green-500/10">مشترك بالفعل</div>` :
+                                `<div class="absolute top-5 left-5 z-10 bg-gray-400 text-white text-[10px] font-black px-3.5 py-1.5 rounded-xl shadow-lg ring-4 ring-gray-400/10">محتوى مقفل</div>`));
+
+                    card.innerHTML = `
+                        ${statusBadge}
+                        <div class="aspect-video relative overflow-hidden bg-gray-100">
+                            <img src="${thumbUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="absolute bottom-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                <div class="bg-white/95 backdrop-blur px-5 py-2.5 rounded-2xl text-primary font-black text-xs shadow-2xl flex items-center gap-2">
+                                     <span class="material-symbols-outlined text-sm">play_circle</span>
+                                    ${(isOwned || isFree) ? 'مشاهدة الآن' : 'شاهد المقدمة'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-1">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                                <span class="text-[10px] font-black text-primary uppercase tracking-[0.2em]">BOUSLA / ACADEMY</span>
+                            </div>
+                            <h3 id="title-${course.$id}" class="text-xl sm:text-2xl font-black text-secondary mb-3 leading-snug group-hover:text-primary transition-colors"></h3>
+                            <p id="desc-${course.$id}" class="text-sm font-bold text-gray-400 line-clamp-2 leading-relaxed mb-6 flex-1"></p>
+
+                            <!-- Pricing Section (As per requested style) -->
+                            <div class="mb-6">
+                                ${course.oldPrice && !isFree ? `
+                                    <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#e1f7f9] text-[#1c1d1f] mb-3">
+                                        <span class="material-symbols-outlined text-sm">sell</span>
+                                        <span class="text-[10px] font-black italic">خصم لفترة محدودة</span>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-sm font-bold text-secondary">يبدأ من</span>
+                                    ${course.oldPrice && !isFree ? `<span class="text-sm font-regular text-gray-400 line-through">${course.oldPrice}</span>` : ''}
+                                    <span class="text-lg font-black text-secondary">${isFree ? 'مجاناً' : (course.price || 'مجاني')}</span>
+                                    <span class="text-xs font-bold text-gray-400">/ الكورس بالكامل</span>
+                                </div>
+                                <p class="text-[10px] font-bold text-gray-400 mt-1">وصول مدى الحياة للمحتوى التعليمي</p>
+                            </div>
+                            
+                            <div class="pt-6 border-t border-gray-50 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="flex -space-x-2 space-x-reverse">
+                                        <div class="size-6 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[8px] font-black text-gray-400">+100</div>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-gray-400">طالب ملتحق</span>
+                                </div>
+                                <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors group-hover:translate-x-1">arrow_back</span>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                    // Safe Text injection
+                    document.getElementById(`title-${course.$id}`).textContent = course.title;
+                    document.getElementById(`desc-${course.$id}`).textContent = course.description || 'ابدأ مسارك التعليمي الصحيح مع تطبيق بوصلة العملي.';
+
+                    // Trigger reveal for new element
+                    setTimeout(() => card.classList.add('active'), index * 100);
+                });
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login-courses.html';
+        }
+
+        // Animation Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+
+        init();
+    </script>
+</body>
+
+</html>
